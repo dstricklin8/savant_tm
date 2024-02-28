@@ -1,3 +1,6 @@
+
+# TrackMan Illustrator ----------------------------------------------------
+
 library(tidyverse)
 library(shiny)
 library(patchwork)
@@ -40,7 +43,7 @@ ui <- navbarPage(
                       sidebarLayout(
                         sidebarPanel(
                           width = 3,
-                          fileInput("upload_1", "Upload TrackMan .csv File", accept = c(".csv")),
+                          fileInput("upload_1", "Upload TrackMan .csv File", accept = c(".csv"), multiple = TRUE),
                           textInput("hitter_choice", "Enter Player Name", 
                                     value = "", placeholder = "Last, First"),
                           selectInput("chart_choice", "Select Chart",
@@ -66,7 +69,7 @@ ui <- navbarPage(
                       sidebarLayout(
                         sidebarPanel(
                           width = 3,
-                          fileInput("upload_2", "Upload TrackMan .csv File", accept = c(".csv")),
+                          fileInput("upload_2", "Upload TrackMan .csv File", accept = c(".csv"), multiple = TRUE),
                           textInput("hitter_choice2", "Enter Player Name", 
                                     value = "", placeholder = "Last, First"),
                           selectInput("chart_choice2", "Select Chart",
@@ -108,10 +111,12 @@ server <- function(input, output, session) {
   
   # Hitters ----
   df_1 <- eventReactive(input$upload_1, {
-    read.csv(input$upload_1$datapath)
+    combined <- lapply(input$upload_1$datapath, read_csv)
+    do.call(rbind, combined)
   })
   df_2 <- eventReactive(input$upload_2, {
-    read.csv(input$upload_2$datapath)
+    combined <- lapply(input$upload_2$datapath, read_csv)
+    do.call(rbind, combined)
   })
   
   data_1 <- eventReactive(input$goButton_1, {

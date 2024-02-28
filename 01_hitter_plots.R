@@ -2,8 +2,8 @@ library(tidyverse)
 library(sp)
 library(sf)
 
-# Scatterplot Functions ----
-#### Pitch Types
+# Scatter plot Functions ----
+## Pitch Types
 plot_pitch_types <- function(batter, df) {
   load(file = "data/app_setup.rda")
   load(file = "data/Strikezone_Polys.rda")
@@ -34,7 +34,7 @@ plot_pitch_types <- function(batter, df) {
   
 }
 
-#### Pitch Result
+## Pitch Result
 plot_pitch_result <- function(batter, df) {
   load(file = "data/app_setup.rda")
   load(file = "data/Strikezone_Polys.rda")
@@ -64,7 +64,7 @@ plot_pitch_result <- function(batter, df) {
     )
 }
 
-#### Pitch Desc.
+## Pitch Desc.
 plot_pitch_description <- function(batter, df) {
   
   load(file = "data/app_setup.rda")
@@ -97,7 +97,7 @@ plot_pitch_description <- function(batter, df) {
     )
 }
 
-#### Batted Ball Type
+## Batted Ball Type
 plot_batted_ball_type <- function(batter, df) {
   load(file = "data/app_setup.rda")
   load(file = "data/Strikezone_Polys.rda")
@@ -129,7 +129,7 @@ plot_batted_ball_type <- function(batter, df) {
     )
 }
 
-#### Contact Type
+## Contact Type
 plot_contact_type <- function(batter, df) {
   load(file = "data/app_setup.rda")
   load(file = "data/Strikezone_Polys.rda")
@@ -161,7 +161,7 @@ plot_contact_type <- function(batter, df) {
 }
 
 # Heatmaps ----
-#### Pitch Heatmap
+## Pitch Heatmap
 plot_pitch_heatmap <- function(batter, df) {
   load(file = "data/app_setup.rda")
   load(file = "data/Strikezone_Polys.rda")
@@ -198,7 +198,7 @@ plot_pitch_heatmap <- function(batter, df) {
     )
 }
 
-#### Swing Heatmap
+## Swing Heatmap
 plot_swing_heatmap <- function(batter, df) {
   
   load(file = "data/app_setup.rda")
@@ -233,7 +233,7 @@ plot_swing_heatmap <- function(batter, df) {
     )
 }
 
-#### Hard-Hit Heatmap
+## Hard-Hit Heatmap
 plot_hardhit_heatmap <- function(batter, df) {
   
   load(file = "data/app_setup.rda")
@@ -267,7 +267,7 @@ plot_hardhit_heatmap <- function(batter, df) {
 }
 
 # Polys ----
-#### Zone - Number of Pitches
+## Zone - Number of Pitches
 plot_zone_total_pitches <- function(batter, df_input, label_input) {
   
   load(file = "data/app_setup.rda")
@@ -314,7 +314,7 @@ plot_zone_total_pitches <- function(batter, df_input, label_input) {
     )
 }
 
-#### Zone - Pitch Percent
+## Zone - Pitch Percent
 plot_zone_pitch_perc <- function(batter, df_input, label_input) {
   
   #### Load App Setup
@@ -364,7 +364,7 @@ plot_zone_pitch_perc <- function(batter, df_input, label_input) {
     )
 }
 
-#### Zone - Exit Velocity
+## Zone - Exit Velocity
 plot_zone_exit_velo <- function(batter, df_input, label_input) {
   
   load(file = "data/app_setup.rda")
@@ -412,7 +412,7 @@ plot_zone_exit_velo <- function(batter, df_input, label_input) {
     )
 }
 
-#### Zone - Launch Angle
+## Zone - Launch Angle
 plot_zone_launch_angle <- function(batter, df_input, label_input) {
   
   load(file = "data/app_setup.rda")
@@ -459,7 +459,7 @@ plot_zone_launch_angle <- function(batter, df_input, label_input) {
     )
 }
 
-#### Zone - Hit Percentage
+## Zone - Batting Avg.
 plot_zone_hit_perc <- function(batter, df_input, label_input) {
   
   #### Load App Setup
@@ -488,8 +488,11 @@ plot_zone_hit_perc <- function(batter, df_input, label_input) {
     scale_fill_distiller(palette = "RdBu", limits = c(0, max(df_input$Freq_Hits)),
                          na.value = "lightgrey") +
     geom_text(label_input, 
-              mapping = aes(x, z, label = sprintf("%.3f", round(Freq_Hits, digits = 3))),
+              mapping = aes(x, z, label = sub("^(-?)0.", "\\1.", sprintf("%.3f", round(Freq_Hits, digits = 3)))),
               size = 5, fontface = "bold", family="mono") +
+    geom_text(label_input %>% filter(Freq_Hits == max(Freq_Hits) | Freq_Hits == 0), 
+              mapping = aes(x, z, label = sub("^(-?)0.", "\\1.", sprintf("%.3f", round(Freq_Hits, digits = 3)))),
+              size = 5, fontface = "bold", family="mono", colour = "white") +
     theme_minimal() +
     theme(
       axis.title = element_blank(),
@@ -504,7 +507,7 @@ plot_zone_hit_perc <- function(batter, df_input, label_input) {
     )
 }
 
-#### Zone - Swing Percentage
+## Zone - Swing Percentage
 plot_zone_swing_perc <- function(batter, df_input, label_input) {
   
   #### Load App Setup
@@ -535,6 +538,9 @@ plot_zone_swing_perc <- function(batter, df_input, label_input) {
     geom_text(label_input, 
               mapping = aes(x, z, label = sprintf("%0.1f", round(Freq_Swings, digits = 1))),
               size = 5, fontface = "bold", family="mono") +
+    geom_text(label_input %>% filter(Freq_Swings == max(Freq_Swings) | Freq_Swings == min(Freq_Swings)), 
+              mapping = aes(x, z, label = sprintf("%0.1f", round(Freq_Swings, digits = 1))),
+              size = 5, fontface = "bold", family="mono", colour = "white") +
     theme_minimal() +
     theme(
       axis.title = element_blank(),
@@ -549,7 +555,7 @@ plot_zone_swing_perc <- function(batter, df_input, label_input) {
     )
 }
 
-#### Zone - Swing Percentage
+## Zone - Swing Percentage
 plot_zone_whiff_perc <- function(batter, df_input, label_input) {
   
   #### Load App Setup
@@ -580,6 +586,9 @@ plot_zone_whiff_perc <- function(batter, df_input, label_input) {
     geom_text(label_input, 
               mapping = aes(x, z, label = sprintf("%0.1f", round(Freq_Whiffs, digits = 1))),
               size = 5, fontface = "bold", family="mono") +
+    geom_text(label_input %>% filter(Freq_Whiffs == max(Freq_Whiffs) | Freq_Whiffs == min(Freq_Whiffs)), 
+              mapping = aes(x, z, label = sprintf("%0.1f", round(Freq_Whiffs, digits = 1))),
+              size = 5, fontface = "bold", family="mono", colour = "white") +
     theme_minimal() +
     theme(
       axis.title = element_blank(),
