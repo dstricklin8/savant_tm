@@ -3,13 +3,12 @@ library(tidyverse)
 #### Zone Charts ----
 Zone_Charts <- c("Zone - Total Pitches", "Zone - Pitch Percentage",
                  "Zone - Exit Velocity", "Zone - Launch Angle",
-                 "Zone - Hit Percentage", "Zone - Swing Percentage",
+                 "Zone - Batting Avg.", "Zone - Swing Percentage",
                  "Zone - Whiff Percentage")
 
 #### Pitch Charts ----
 Pitch_Charts <- c("Pitch Types", "Pitch Description",
-                  "Pitch Result", "Batted Ball Type", "Contact Type",
-                  "Release Point", "Release Extension", "Pitch Movement")
+                  "Pitch Result", "Batted Ball Type", "Contact Type")
 
 Heat_Maps <- c("Pitch Heatmap", "Swing Heatmap", "Hard-Hit Heatmap")
 
